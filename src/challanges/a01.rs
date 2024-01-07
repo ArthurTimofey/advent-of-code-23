@@ -1,5 +1,11 @@
-fn match_first_number_in_string(str: String) -> String {
+fn match_first_number_in_string(str: String, reverse: bool) -> String {
     let regex = regex::Regex::new(r"(one|two|three|four|five|six|seven|eight|nine)").unwrap();
+
+    for (i, s) in str.chars().enumerate() {
+        if reverse {
+            println!("{} {}", str, str.chars().nth(str.len() - i - 1).unwrap());
+        }
+    }
 
     match regex.find(&str) {
         Some(m) => match m.as_str() {
@@ -27,8 +33,8 @@ fn get_first_last_number(row: &str) -> i32 {
 
     println!("Row: {}, RevRow: {}", row, rev_row);
 
-    let first = match_first_number_in_string(row.to_string());
-    let last = match_first_number_in_string(row.chars().rev().collect());
+    let first = match_first_number_in_string(row.to_string(), false);
+    let last = match_first_number_in_string(row.chars().rev().collect(), true);
 
     println!("First: {}, Last: {}", first, last);
 
