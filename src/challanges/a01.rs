@@ -1,11 +1,28 @@
-fn match_first_number_in_string(str: String, reverse: bool) -> String {
-    let regex = regex::Regex::new(r"(one|two|three|four|five|six|seven|eight|nine)").unwrap();
+fn get_end_start_numbers(str: String) -> String {
+    let regex = regex::Regex::new(r"(\+d|one|two|three|four|five|six|seven|eight|nine)").unwrap();
 
-    for (i, s) in str.chars().enumerate() {
-        if reverse {
-            println!("{} {}", str, str.chars().nth(str.len() - i - 1).unwrap());
+    let mut test_str = String::from("");
+    let mut start = String::from("");
+    let mut end = String::from("");
+
+    for (i, c) in str.chars().rev().enumerate() {
+        match regex.find(test_str.as_str()) {
+            Some(m) => {
+                end = m.as_str().to_string();
+                break;
+            }
+            None() => {}
         }
+        test_str = c.to_string() + &test_str.to_owned()
     }
+
+    println!("Test: {}", test_str);
+
+    return str;
+}
+
+fn match_first_number_in_string(str: String) -> String {
+    let regex = regex::Regex::new(r"(one|two|three|four|five|six|seven|eight|nine)").unwrap();
 
     match regex.find(&str) {
         Some(m) => match m.as_str() {
@@ -29,20 +46,18 @@ fn get_first_last_number(row: &str) -> i32 {
         return 0;
     }
 
-    let rev_row = row.chars().rev().collect::<String>();
+    let first = match_first_number_in_string(row.to_string());
+    let last = match_first_number_in_string(row.to_string());
 
-    println!("Row: {}, RevRow: {}", row, rev_row);
-
-    let first = match_first_number_in_string(row.to_string(), false);
-    let last = match_first_number_in_string(row.chars().rev().collect(), true);
-
-    println!("First: {}, Last: {}", first, last);
+    // println!("First: {}, Last: {}", first, last);
 
     format!("{}{}", first, last).parse::<i32>().unwrap()
 }
 
 pub fn run(data: String) {
     let rows = data.split("\n");
+
+    get_end_start_numbers("one".to_string());
 
     let numbers: Vec<i32> = rows.map(|row| get_first_last_number(row)).collect();
 
