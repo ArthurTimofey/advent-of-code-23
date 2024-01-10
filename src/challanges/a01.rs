@@ -1,27 +1,4 @@
-fn get_end_start_numbers(str: String) -> String {
-    let regex = regex::Regex::new(r"(\+d|one|two|three|four|five|six|seven|eight|nine)").unwrap();
-
-    let mut test_str = String::from("");
-    let mut start = String::from("");
-    let mut end = String::from("");
-
-    for (i, c) in str.chars().rev().enumerate() {
-        match regex.find(test_str.as_str()) {
-            Some(m) => {
-                end = m.as_str().to_string();
-                break;
-            }
-            None() => {}
-        }
-        test_str = c.to_string() + &test_str.to_owned()
-    }
-
-    println!("Test: {}", test_str);
-
-    return str;
-}
-
-fn match_first_number_in_string(str: String) -> String {
+fn find_first_number(str: &str) -> String {
     let regex = regex::Regex::new(r"(one|two|three|four|five|six|seven|eight|nine)").unwrap();
 
     match regex.find(&str) {
@@ -41,23 +18,46 @@ fn match_first_number_in_string(str: String) -> String {
     }
 }
 
+fn match_last_number_in_string(str: String) -> String {
+    for (i, c) in str.chars().rev().enumerate() {
+        let number = find_first_number(&str[str.len() - i..str.len()].to_string());
+
+        if number != "" {
+            return number;
+        } else if c.is_numeric() {
+            return c.to_string();
+        }
+    }
+
+    return "".to_string();
+}
+
+fn match_first_number_in_string(str: String) -> String {
+    for (i, c) in str.chars().enumerate() {
+        let number = find_first_number(&str[0..i].to_string());
+        if number != "" {
+            return number;
+        } else if c.is_numeric() {
+            return c.to_string();
+        }
+    }
+
+    return "".to_string();
+}
+
 fn get_first_last_number(row: &str) -> i32 {
     if row.len() == 0 {
         return 0;
     }
 
     let first = match_first_number_in_string(row.to_string());
-    let last = match_first_number_in_string(row.to_string());
-
-    // println!("First: {}, Last: {}", first, last);
+    let last = match_last_number_in_string(row.to_string());
 
     format!("{}{}", first, last).parse::<i32>().unwrap()
 }
 
 pub fn run(data: String) {
     let rows = data.split("\n");
-
-    get_end_start_numbers("one".to_string());
 
     let numbers: Vec<i32> = rows.map(|row| get_first_last_number(row)).collect();
 
