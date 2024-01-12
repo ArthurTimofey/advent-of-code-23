@@ -50,10 +50,9 @@ fn get_first_last_number(row: &str) -> i32 {
         return 0;
     }
 
+    // https://github.com/timvisee/advent-of-code-2023/blob/master/day01b/src/main.rs
     let range = 0..row.len();
     let prev_range = (0..row.len()).rev();
-
-    println!("range: {:?}", prev_range);
 
     let first = match_first_number_in_string(row.to_string());
     let last = match_last_number_in_string(row.to_string());
